@@ -490,10 +490,146 @@ body {
     background: transparent;
   }
 
+  .services-flow {
+    color: #14181e;
+  }
+
+  .services-intro {
+    max-width: 1120px;
+  }
+
+  .services-mark {
+    display: block;
+    margin-bottom: clamp(18px, 2vw, 28px);
+    color: #57006f;
+    font-family: var(--font-jakarta), ui-sans-serif, system-ui;
+    font-size: clamp(15px, 1.25vw, 19px);
+    font-weight: 800;
+    letter-spacing: 0;
+  }
+
+  .services-intro h2 {
+    margin: 0;
+    font-size: clamp(48px, 6.5vw, 104px);
+    font-weight: 850;
+    letter-spacing: 0;
+    line-height: 0.91;
+  }
+
+  .services-intro h2 span {
+    color: rgba(20, 24, 30, 0.28);
+  }
+
+  .services-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: clamp(10px, 1.2vw, 18px);
+    margin-top: clamp(48px, 6vw, 92px);
+  }
+
+  .service-card {
+    position: relative;
+    min-height: clamp(268px, 25vw, 360px);
+    overflow: hidden;
+    border: 1px solid rgba(20, 24, 30, 0.11);
+    border-radius: 9px;
+    background:
+      radial-gradient(circle at 100% 0%, rgba(87, 0, 111, 0.12), transparent 42%),
+      rgba(244, 244, 242, 0.82);
+    padding: clamp(20px, 2vw, 30px);
+    transition:
+      transform 550ms cubic-bezier(0.22, 1, 0.36, 1),
+      background 350ms ease,
+      border-color 350ms ease;
+  }
+
+  .service-card::after {
+    content: "";
+    position: absolute;
+    right: -28%;
+    bottom: -35%;
+    width: 72%;
+    aspect-ratio: 1;
+    border: 1px solid rgba(87, 0, 111, 0.18);
+    border-radius: 50%;
+    transition: transform 650ms cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .service-card:hover {
+    border-color: rgba(87, 0, 111, 0.32);
+    background:
+      radial-gradient(circle at 100% 0%, rgba(87, 0, 111, 0.2), transparent 48%),
+      rgba(255, 255, 255, 0.96);
+    transform: translateY(-8px);
+  }
+
+  .service-card:hover::after {
+    transform: scale(1.16);
+  }
+
+  .service-card-number,
+  .service-card h3,
+  .service-card ul {
+    position: relative;
+    z-index: 1;
+  }
+
+  .service-card-number {
+    color: rgba(87, 0, 111, 0.58);
+    font-size: 11px;
+    font-weight: 850;
+    letter-spacing: 0.08em;
+  }
+
+  .service-card h3 {
+    margin: clamp(48px, 7vw, 92px) 0 22px;
+    font-size: clamp(19px, 1.55vw, 25px);
+    font-weight: 800;
+    letter-spacing: 0;
+    line-height: 1.06;
+  }
+
+  .service-card ul {
+    display: grid;
+    gap: 8px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    color: rgba(20, 24, 30, 0.63);
+    font-size: clamp(12px, 1vw, 14px);
+    font-weight: 650;
+    line-height: 1.25;
+  }
+
+  .service-card li::before {
+    content: "•";
+    margin-right: 7px;
+    color: #57006f;
+  }
+
+  .services-reveal {
+    opacity: 0;
+    transform: translateY(70px);
+    transition:
+      opacity 700ms ease,
+      transform 850ms cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .services-reveal-visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
   .flow-intro {
-    max-width: 680px;
-    margin: 0 auto;
-    text-align: center;
+    max-width: calc(50% - clamp(6px, 0.6vw, 8px));
+    margin: 0;
+    text-align: left;
+  }
+
+  .flow-intro-position {
+    position: relative;
+    z-index: 1;
+    transform: translateY(clamp(54px, 5vw, 82px));
   }
 
   .flow-kicker {
@@ -506,16 +642,18 @@ body {
   }
 
   .flow-intro h2 {
-    margin: 0 auto;
+    margin: 0;
     max-width: 760px;
-    font-size: clamp(32px, 3.8vw, 58px);
-    font-weight: 950;
-    letter-spacing: -0.055em;
-    line-height: 0.92;
+    font-size: clamp(22px, 2.45vw, 38px);
+    font-family: "Haus Lemon Milk", ui-sans-serif, system-ui;
+    font-weight: 700;
+    letter-spacing: -0.075em;
+    line-height: 0.98;
+    text-transform: uppercase;
   }
 
   .portfolio-reveal-anchor + .project-stack {
-    margin-top: clamp(42px, 5vw, 70px);
+    margin-top: clamp(22px, 2.6vw, 38px);
   }
 
   .portfolio-reveal {
@@ -858,6 +996,17 @@ body {
     transform: translate(-50%, -50%);
     opacity: 1 !important;
     mix-blend-mode: normal;
+    filter: drop-shadow(0 8px 18px rgba(0, 0, 0, 0.38));
+  }
+
+  .project-card-bonijuris-logo {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    z-index: 3;
+    width: 84%;
+    height: auto;
+    transform: translate(-50%, -50%);
     filter: drop-shadow(0 8px 18px rgba(0, 0, 0, 0.38));
   }
 
@@ -1266,7 +1415,39 @@ body {
     }
 
     .flow-intro h2 {
+      margin: 0 auto;
       letter-spacing: -0.052em;
+    }
+
+    .flow-intro {
+      max-width: 680px;
+      margin: 0 auto;
+      text-align: center;
+    }
+
+    .services-flow {
+      padding-top: 56px;
+    }
+
+    .services-intro h2 {
+      font-size: clamp(42px, 12vw, 64px);
+      line-height: 0.94;
+    }
+
+    .services-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+      margin-top: 42px;
+    }
+
+    .service-card {
+      min-height: 270px;
+      padding: 18px;
+    }
+
+    .service-card h3 {
+      margin-top: 54px;
+      font-size: 18px;
     }
 
     .project-stack {

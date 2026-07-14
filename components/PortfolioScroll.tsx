@@ -50,6 +50,12 @@ const projects = [
   {
     title: "Ailton Tertuliano",
     description: "Site pessoal com narrativa direta, presenca profissional e foco em reputacao.",
+    layers: {
+      foreground: "/portfolio/bonijuris-logo.png",
+      background: "/portfolio/bonijuris-office.png",
+      foregroundType: "bonijurisLogo",
+      backgroundType: "photo",
+    },
   },
   {
     title: "Ailton Tertuliano - Lancamento",
@@ -92,12 +98,14 @@ export function PortfolioScroll() {
     <section
       ref={sectionRef}
       id="next"
-      className="one-page-flow px-5 pb-10 pt-9 sm:px-8 lg:px-5 lg:pb-16 lg:pt-12"
+      className="one-page-flow px-5 pb-10 pt-0 sm:px-8 lg:px-5 lg:pb-16 lg:pt-0"
     >
       <div className="mx-auto w-full max-w-[1500px]">
         <div className="portfolio-reveal-anchor" data-portfolio-reveal>
-          <div className="flow-intro portfolio-reveal">
-            <h2>Projetos mais recentes</h2>
+          <div className="flow-intro-position">
+            <div className="flow-intro portfolio-reveal">
+              <h2>Projetos mais recentes</h2>
+            </div>
           </div>
         </div>
 
@@ -131,9 +139,9 @@ export function PortfolioScroll() {
                       </div>
                     )}
                     <img
-                      className={project.layers.foregroundType === "phone" ? "project-card-phone" : project.layers.foregroundType === "logo" ? "project-card-logo" : project.layers.foregroundType === "magazines" ? "project-card-magazines" : "project-card-notebook"}
+                      className={project.layers.foregroundType === "phone" ? "project-card-phone" : project.layers.foregroundType === "bonijurisLogo" ? "project-card-bonijuris-logo" : project.layers.foregroundType === "logo" ? "project-card-logo" : project.layers.foregroundType === "magazines" ? "project-card-magazines" : "project-card-notebook"}
                       src={project.layers.foreground}
-                      alt={project.layers.foregroundType === "phone" ? "Aplicativo da Haus apresentado em um celular" : project.layers.foregroundType === "logo" ? "Logo da NPG Capital" : project.layers.foregroundType === "magazines" ? "Capas da Revista Direito e Condominio" : "Site da Editora Haus apresentado em um notebook"}
+                      alt={project.layers.foregroundType === "phone" ? "Aplicativo da Haus apresentado em um celular" : project.layers.foregroundType === "bonijurisLogo" ? "Logo da Editora Bonijuris" : project.layers.foregroundType === "logo" ? "Logo da NPG Capital" : project.layers.foregroundType === "magazines" ? "Capas da Revista Direito e Condominio" : "Site da Editora Haus apresentado em um notebook"}
                     />
                   </div>
                 )}

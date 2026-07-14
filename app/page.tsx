@@ -2,6 +2,8 @@ import { Instagram, Mail, MessageCircle, Phone } from "lucide-react";
 import { HeroZoom } from "@/components/HeroZoom";
 import { PortfolioScroll } from "@/components/PortfolioScroll";
 import { FloatingNav } from "@/components/FloatingNav";
+import { SmoothScroll } from "@/components/SmoothScroll";
+import { ServicesSection } from "@/components/ServicesSection";
 
 const contact = [
   { icon: Phone, text: "41 99269-0737", href: "tel:+5541992690737" },
@@ -13,9 +15,11 @@ const contact = [
 export default function Home() {
   return (
     <>
+      <SmoothScroll />
       <main className="landing-shell text-[#14181e]">
         <HeroZoom />
         <PortfolioScroll />
+        <ServicesSection />
 
         <section id="contato" className="contact-flow relative overflow-hidden px-5 py-16 sm:px-8 lg:px-10 lg:py-24">
           <div className="relative z-10 mx-auto grid min-h-[70svh] w-full max-w-7xl items-center gap-8 lg:grid-cols-[1fr_430px]">
