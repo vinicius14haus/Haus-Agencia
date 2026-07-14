@@ -1,10 +1,23 @@
 "use client";
 
-import { ArrowUpRight } from "lucide-react";
-import { useEffect, useState } from "react";
+import { ArrowUpRight, Minus, Plus } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
+
+const phrases = ["Precisa de um site?", "Quer se destacar?", "Bora criar?"];
+
+const menuItems = [
+  { label: "Início", href: "#", thumb: "/haus-hero-background.png" },
+  { label: "Portfólio", href: "#next", thumb: "/portfolio/portfolio-agencia-haus.png", tag: "Cases" },
+  { label: "Serviços", href: "#", thumb: "/portfolio/design-grafico.png" },
+  { label: "Sobre", href: "#", thumb: "/editora-haus.png" },
+  { label: "Contato", href: "#contato", thumb: "/portfolio/resultados-carousel.png", tag: "WhatsApp" },
+];
 
 export function FloatingNav() {
   const [isVisible, setIsVisible] = useState(false);
+  const [phraseIndex, setPhraseIndex] = useState(0);
+  const [menuOpen, setMenuOpen] = useState(false);
+  const closeTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
     const revealAfter = 700;
@@ -19,45 +32,128 @@ export function FloatingNav() {
     return () => window.removeEventListener("scroll", updateVisibility);
   }, []);
 
+  useEffect(() => {
+    let step = 0;
+    let timer: ReturnType<typeof setTimeout>;
+
+    const tick = () => {
+      step += 1;
+      setPhraseIndex((prev) => (prev + 1) % phrases.length);
+      const delay = step % phrases.length === 0 ? 3000 : 1700;
+      timer = setTimeout(tick, delay);
+    };
+
+    timer = setTimeout(tick, 1700);
+    return () => clearTimeout(timer);
+  }, []);
+
+  const cancelClose = () => {
+    if (closeTimer.current) {
+      clearTimeout(closeTimer.current);
+      closeTimer.current = null;
+    }
+  };
+
+  const scheduleClose = () => {
+    cancelClose();
+    closeTimer.current = setTimeout(() => setMenuOpen(false), 1300);
+  };
+
+  useEffect(() => cancelClose, []);
+
   return (
     <nav
-      className={`group/dock fixed bottom-5 left-1/2 z-[9999] isolate flex min-h-[68px] w-[min(calc(100%_-_24px),720px)] -translate-x-1/2 items-center justify-between gap-2 overflow-hidden rounded-full border border-white/60 bg-white/35 p-1.5 text-[#171b22] shadow-[0_20px_55px_rgba(34,18,48,.24),inset_0_1px_1px_rgba(255,255,255,.86)] backdrop-blur-[28px] transition-[transform,opacity,box-shadow,background-color] duration-700 ease-[cubic-bezier(.22,1,.36,1)] hover:-translate-y-1 hover:shadow-[0_28px_70px_rgba(87,0,111,.28),inset_0_1px_1px_rgba(255,255,255,.95)] sm:bottom-8 ${
+      className={`fixed bottom-5 left-1/2 z-[9999] flex w-[500px] max-w-[calc(100%-24px)] -translate-x-1/2 flex-col overflow-hidden rounded-[24px] bg-[#141414] text-white shadow-[0_20px_45px_rgba(0,0,0,.45)] transition-[transform,opacity] duration-700 ease-[cubic-bezier(.22,1,.36,1)] sm:bottom-8 ${
         isVisible
           ? "translate-y-0 opacity-100"
           : "pointer-events-none translate-y-[calc(100%_+_56px)] opacity-0"
       }`}
       aria-label="Navegacao principal"
       aria-hidden={!isVisible}
+      onMouseEnter={cancelClose}
+      onMouseLeave={scheduleClose}
     >
-      <span className="pointer-events-none absolute -left-8 top-0 h-full w-52 rounded-full bg-white/35 blur-2xl transition-transform duration-700 group-hover/dock:translate-x-20" />
-      <span className="pointer-events-none absolute -right-12 bottom-[-38px] h-24 w-64 rounded-full bg-[#650080]/15 blur-2xl transition-transform duration-700 group-hover/dock:-translate-x-16" />
+      <div className="flex h-16 shrink-0 items-center justify-between gap-4 py-1.5 pl-5 pr-3">
+        <div className="flex min-w-0 items-center gap-5">
+          <a href="#next" aria-label="Haus" className="grid h-7 w-10 shrink-0 place-items-center">
+            <span className="haus-dock-logo" aria-hidden="true" />
+          </a>
 
-      <a
-        href="#next"
-        aria-label="Haus"
-        className="group/logo relative z-10 grid h-14 w-[72px] shrink-0 place-items-center"
-      >
-        <span className="haus-dock-logo" aria-hidden="true" />
-      </a>
+          <div className="relative h-[24px] min-w-0 overflow-hidden">
+            <div
+              className="flex flex-col transition-transform duration-500 ease-[cubic-bezier(.22,1,.36,1)]"
+              style={{ transform: `translateY(-${phraseIndex * 24}px)` }}
+            >
+              {phrases.map((phrase) => (
+                <span key={phrase} className="h-[24px] whitespace-nowrap text-[20px] font-semibold leading-[24px] text-white">
+                  {phrase}
+                </span>
+              ))}
+            </div>
+          </div>
+        </div>
 
-      <a
-        className="group/cta relative z-10 flex h-[50px] shrink-0 items-center gap-2 overflow-hidden rounded-full border border-white/70 bg-white/90 px-5 text-[13px] font-bold text-[#17131b] shadow-[0_8px_22px_rgba(40,24,48,.16)] transition-all duration-300 hover:bg-white hover:shadow-[0_0_30px_8px_rgba(255,255,255,.38)] max-sm:px-4 max-sm:text-[12px]"
-        href="https://wa.me/5541992690737"
+        <div className="flex shrink-0 items-center gap-1.5">
+          <a
+            className="flex h-10 items-center gap-2 rounded-[12px] bg-white px-4 text-[16px] font-medium text-[#17131b]"
+            href="https://wa.me/5541992690737"
+          >
+            Vamos conversar
+            <ArrowUpRight size={16} strokeWidth={2.2} />
+          </a>
+
+          {!menuOpen && (
+            <button
+              type="button"
+              onClick={() => setMenuOpen(true)}
+              aria-label="Abrir menu"
+              aria-expanded={false}
+              className="grid h-9 w-9 shrink-0 place-items-center text-white"
+            >
+              <Plus size={20} strokeWidth={2.4} />
+            </button>
+          )}
+        </div>
+      </div>
+
+      <div
+        className={`grid transition-[grid-template-rows] duration-500 ease-[cubic-bezier(.22,1,.36,1)] ${
+          menuOpen ? "grid-rows-[1fr]" : "grid-rows-[0fr]"
+        }`}
       >
-        <span className="relative h-5 overflow-hidden leading-5">
-          <span className="block transition-transform duration-300 group-hover/cta:-translate-y-full">
-            Come&ccedil;ar uma ideia
-          </span>
-          <span className="absolute left-0 top-full block transition-transform duration-300 group-hover/cta:-translate-y-full">
-            Come&ccedil;ar uma ideia
-          </span>
-        </span>
-        <ArrowUpRight
-          size={15}
-          strokeWidth={2.2}
-          className="transition-transform duration-300 group-hover/cta:translate-x-0.5 group-hover/cta:-translate-y-0.5"
-        />
-      </a>
+        <div className="overflow-hidden">
+          <div className="divide-y divide-white/10 border-t border-white/10">
+            {menuItems.map(({ label, href, thumb, tag }) => (
+              <a key={label} href={href} className="flex items-center gap-3 px-4 py-3">
+                <img
+                  src={thumb}
+                  alt=""
+                  className="h-11 w-11 shrink-0 rounded-[10px] object-cover"
+                />
+                <span className="flex-1 text-[17px] font-medium text-white">{label}</span>
+                {tag && (
+                  <span className="rounded-full border border-white/10 px-2.5 py-1 text-[13px] text-white/50">
+                    {tag}
+                  </span>
+                )}
+              </a>
+            ))}
+          </div>
+
+          <div className="flex h-12 items-center justify-between border-t border-white/10 px-4 text-[13px] text-white/50">
+            <a href="https://agencia.haus">Instagram</a>
+            <button
+              type="button"
+              onClick={() => setMenuOpen(false)}
+              aria-label="Fechar menu"
+              aria-expanded={true}
+              className="grid h-8 w-8 shrink-0 place-items-center text-white"
+            >
+              <Minus size={18} strokeWidth={2.4} />
+            </button>
+          </div>
+        </div>
+      </div>
     </nav>
   );
 }
