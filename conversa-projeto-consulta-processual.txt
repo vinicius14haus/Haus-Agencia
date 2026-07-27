@@ -1,0 +1,140 @@
+REGISTRO DE CONVERSA - IDEIA DE APLICATIVO DE CONSULTA PROCESSUAL
+Data: 23/07/2026
+
+IDEIA INICIAL
+
+Construir um robô/aplicativo para automatizar uma pesquisa hoje manual.
+A entrada seria uma planilha com aproximadamente 700 nomes e CPFs.
+
+Para cada pessoa, a intenção é identificar se ela possui processo trabalhista contra o Banco do Brasil e aplicar filtros jurídicos:
+- a pessoa deve figurar como autora/reclamante;
+- Banco do Brasil deve figurar como réu/reclamado;
+- o resultado deve ter sido favorável, conforme critério a definir;
+- há menção a TST como possível etapa final da decisão;
+- a data de trânsito em julgado deve estar dentro dos últimos cinco anos.
+
+O ponto citado pela cliente foi "jus.br", possivelmente uma referência a sites oficiais do Judiciário (.jus.br) ou, alternativamente, ao Jusbrasil. Essa distinção precisa ser confirmada.
+
+LEITURA INICIAL DE VIABILIDADE
+
+Do ponto de vista de construção de software, é um projeto de complexidade média. A parte de aplicativo é conhecida: importar planilha, manter uma fila de pessoas, mostrar progresso, aplicar filtros, guardar resultados e exportar relatório.
+
+O maior risco não é ler 700 CPFs. É ter uma fonte de dados permitida, confiável e estável que localize processos por CPF e forneça os dados necessários.
+
+Uma solução responsável deve ser apresentada como "triagem automatizada com validação jurídica", e não como decisão jurídica definitiva. Os critérios "favorável", "última decisão no TST" e "trânsito em julgado" precisam ser definidos por advogado ou pela equipe jurídica.
+
+QUESTÕES A CONFIRMAR COM A CLIENTE/EQUIPE JURÍDICA
+
+1. Quando dizem "jus.br", referem-se a qual site ou tribunal exatamente? É um portal oficial, PJe, TRT, TST ou Jusbrasil?
+2. A lista possui somente nome e CPF ou também números de processos?
+3. O processo precisa obrigatoriamente chegar ao TST? Ou basta que haja decisão definitiva/transitada em julgado, ainda que no TRT?
+4. O que é considerado "favorável"? Procedência total, procedência parcial, acordo, condenação em alguma verba, outro critério?
+5. A pessoa precisa necessariamente ser reclamante/autora e o Banco do Brasil precisa necessariamente ser reclamado/réu?
+6. Quais nomes/empresas entram como Banco do Brasil? Apenas Banco do Brasil S.A. ou também subsidiárias, fundações e empresas do grupo?
+7. Os cinco anos contam a partir da data do trânsito em julgado até a data da pesquisa?
+8. O resultado desejado é apenas aprovado/reprovado, ou precisa de evidências: número do processo, tribunal, link, data, movimentação e trecho da decisão?
+9. Quem é o controlador dos CPFs e qual a base legal para esse tratamento, conforme LGPD?
+10. A equipe precisa revisar manualmente todos os aprovados/ambíguos antes de usar o resultado?
+
+FORMATO DE ENTREGA: SITE OU APLICATIVO INSTALADO
+
+O sistema pode ser entregue como aplicativo web privado ou aplicativo de desktop instalado no Windows.
+
+Sistema web privado:
+- usuários acessam um link com login;
+- o código pode ficar em repositório privado no GitHub;
+- o GitHub guarda o código, mas não é a hospedagem do sistema;
+- uma hospedagem/servidor deixa o aplicativo acessível;
+- atualizações são feitas uma vez e chegam para todos;
+- recomendado quando várias pessoas precisam acessar e não há requisito local.
+
+Aplicativo Windows instalado:
+- os usuários baixam e instalam um programa, com .exe/instalador;
+- a planilha e os CPFs podem permanecer no computador deles;
+- pode ser melhor se a consulta exigir certificado digital, navegador local, rede interna ou credenciais locais;
+- atualizações precisam ser distribuídas ou implementadas com atualização automática;
+- tecnologias possíveis: Tauri (preferência por ser mais leve) ou Electron.
+
+Para a expectativa da cliente de "sistema/aplicativo", um aplicativo instalado é totalmente possível. O produto pode conter login, importação de Excel, fila/progresso, resultados, revisão, exportação e histórico.
+
+ESTRUTURA SUGERIDA DO APLICATIVO DE DESKTOP
+
+- Tela de login e permissões;
+- Importação da planilha;
+- Validação e mascaramento de CPF;
+- Lista/fila das consultas e indicador de andamento;
+- Tela de resultados e casos pendentes de revisão;
+- Página de detalhes com processo, tribunal, movimentações, fonte e evidências;
+- Filtros pelos critérios jurídicos;
+- Exportação de Excel e/ou PDF;
+- Histórico e registro de quem consultou/alterou dados;
+- Banco de dados local ou corporativo;
+- Proteção de dados, backups e política de retenção.
+
+PRAZO E DIFICULDADE ESTIMADOS
+
+Considerando experiência atual de construir sites completos em cerca de uma semana:
+
+- Interface do sistema desktop: baixa a média dificuldade; 3 a 5 dias.
+- Ler planilha e gerar resultados/exportação: baixa dificuldade; 1 a 2 dias.
+- Empacotar como instalador Windows: baixa a média dificuldade; 1 a 2 dias.
+- Integração com API autorizada que já entregue processos: média dificuldade; 3 a 7 dias.
+- Automação de páginas públicas no navegador: média a alta dificuldade; 1 a 3 semanas, podendo variar por captcha, bloqueios e mudanças nos sites.
+- Interpretar juridicamente resultado favorável, TST e trânsito em julgado: alta dificuldade; depende de regras objetivas e validação jurídica.
+
+PROPOSTA DE FASEAMENTO
+
+Fase 1 - MVP, aproximadamente uma semana:
+- aplicativo Windows;
+- importação de planilha;
+- painel, filtros e resultados;
+- exportação;
+- estrutura para plugar a fonte de consulta;
+- campos para revisão manual.
+
+Fase 2 - Integração e validação:
+- conexão com a fonte realmente escolhida;
+- testes com amostra real de processos;
+- definição e validação das regras jurídicas;
+- tratamento de exceções e auditoria.
+
+Se houver uma API autorizada que encontre processos por CPF, a estimativa total pode ficar em uma a duas semanas. Se depender de automação de sites públicos, é mais realista tratar como duas a quatro semanas, com margem para obstáculos externos.
+
+API OFICIAL IDENTIFICADA
+
+Existe a API Pública do DataJud, do Conselho Nacional de Justiça (CNJ). É uma API oficial e gratuita para metadados de processos públicos do Judiciário brasileiro.
+
+Ela possui endpoints para o Tribunal Superior do Trabalho (TST) e para todos os Tribunais Regionais do Trabalho (TRTs). Pode retornar, entre outros, número do processo, tribunal, classe, assuntos, órgão julgador e movimentações.
+
+Fontes oficiais:
+- Portal/API do CNJ: https://www.cnj.jus.br/sistemas/datajud/api-publica/
+- Acesso/chave da API: https://datajud-wiki.cnj.jus.br/api-publica/acesso/
+- Endpoints, incluindo TST e TRTs: https://datajud-wiki.cnj.jus.br/api-publica/endpoints/
+- Glossário dos campos: https://datajud-wiki.cnj.jus.br/api-publica/glossario/
+
+LIMITAÇÃO IMPORTANTE DO DATAJUD
+
+O DataJud público não lista CPF, nome das partes nem papel processual como campos públicos disponíveis no glossário. Portanto, ele não resolve sozinho a etapa de pegar 700 CPFs e descobrir quais processos pertencem a cada pessoa ou quais envolvem o Banco do Brasil.
+
+Ele é apropriado como fonte para confirmar/analisar processos já localizados, inclusive verificando movimentações no TST e nos TRTs.
+
+ARQUITETURA PROVÁVEL
+
+Fonte autorizada que localiza processos por CPF
+    -> DataJud oficial para complementar/confirmar metadados e movimentações
+    -> regras jurídicas definidas pela equipe
+    -> aplicativo com resultado, evidências e revisão humana
+
+ALTERNATIVAS PARA LOCALIZAR PROCESSOS A PARTIR DO CPF
+
+- contratar uma API comercial licenciada de pesquisa jurídica que permita expressamente consulta por CPF e automação;
+- obter acesso oficial/contratado a uma base que contenha dados das partes;
+- a própria equipe localizar os processos por meios autorizados, enquanto o aplicativo organiza, consulta os dados do processo e aplica os filtros.
+
+Não é recomendável basear o projeto em automação não autorizada de Jusbrasil ou páginas de tribunais. Além de ser tecnicamente frágil, isso pode contrariar termos de uso, gerar bloqueios e interromper a operação durante uma consulta em massa.
+
+PRÓXIMA PERGUNTA OBJETIVA PARA A CLIENTE
+
+"Qual ferramenta vocês utilizam hoje para descobrir processos por CPF? Ela possui API ou permite integração automatizada?"
+
+A resposta a essa pergunta define a fonte de dados, o nível de automação permitido e o prazo real da fase de integração.

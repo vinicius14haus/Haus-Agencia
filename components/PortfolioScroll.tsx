@@ -1,70 +1,60 @@
 "use client";
-
 import { useEffect, useRef } from "react";
 
-const projects = [
-  {
-    title: "Livro Ailton Tertuliano",
-    image: "/portfolio/livro-ailton.png",
-  },
-  {
-    title: "NPG Capital",
-    description: "Presenca digital para uma garantidora condominial com autoridade, clareza e conversao.",
-    layers: {
-      foreground: "/portfolio/npg-capital-logo.png",
-      background: "/portfolio/npg-faria-lima.jpg",
-      foregroundType: "logo",
-      backgroundType: "photo",
+type Project = {
+  title: string;
+  image: string;
+  size: string;
+  titleImage?: string;
+  titleLogoVariant?: string;
+};
+
+const projectColumns: Project[][] = [
+  [
+    {
+      title: "NPG Capital",
+      image: "/portfolio/portfolio-npg-capital-card.png",
+      titleImage: "/portfolio/npg-logo.webp",
+      size: "square",
     },
-  },
-  {
-    title: "Editora Haus",
-    description: "Uma experiencia editorial com ritmo, catalogo visual e leitura de marca mais sofisticada.",
-    layers: {
-      foreground: "/portfolio/editora-notebook.png",
-      background: "/portfolio/editora-sky.png",
+    {
+      title: "Editora Haus",
+      image: "/portfolio/portfolio-editora-haus-card.png",
+      titleImage: "/haus-logo.png",
+      titleLogoVariant: "haus",
+      size: "square",
     },
-  },
-  {
-    title: "Projeto futuro 02",
-    layers: {
-      foreground: "/portfolio/haus-phone.png",
-      background: "/portfolio/haus-phone-background.png",
-      foregroundType: "phone",
+  ],
+  [
+    {
+      title: "Bonijuris",
+      image: "/portfolio/portfolio-bonijuris-card.png",
+      titleImage: "/portfolio/bonijuris-logo-white.png",
+      titleLogoVariant: "bonijuris",
+      size: "small",
     },
-  },
-  {
-    title: "Revista Direito e Condominio",
-    layers: {
-      foreground: "/portfolio/revistas-condominio.png",
-      background: "/portfolio/haus-phone-background.png",
-      foregroundType: "magazines",
-      backgroundTone: "steel",
+    {
+      title: "Comunica&ccedil;&atilde;o Condominial",
+      image: "/portfolio/portfolio-comunicacao-condominial-card.png",
+      titleImage: "/portfolio/comunicacao-condominial-logo-white.png",
+      titleLogoVariant: "comunicacao",
+      size: "tall",
     },
-  },
-  {
-    title: "Agencia Haus",
-    description: "Sistema visual proprietario para mostrar criacao, estrategia e execucao no mesmo gesto.",
-    image: "/portfolio/trafego-pago.png",
-  },
-  {
-    title: "Ailton Tertuliano",
-    description: "Site pessoal com narrativa direta, presenca profissional e foco em reputacao.",
-    layers: {
-      foreground: "/portfolio/bonijuris-logo.png",
-      background: "/portfolio/bonijuris-office.png",
-      foregroundType: "bonijurisLogo",
-      backgroundType: "photo",
+  ],
+  [
+    {
+      title: "Haus",
+      image: "/portfolio/portfolio-haus-card.png",
+      titleImage: "/haus-logo.png",
+      titleLogoVariant: "haus",
+      size: "square",
     },
-  },
-  {
-    title: "Ailton Tertuliano - Lancamento",
-    layers: {
-      foreground: "/portfolio/ailton-notebook.png",
-      background: "/portfolio/editora-sky.png",
-      backgroundTone: "night",
+    {
+      title: "Ailton Tertuliano",
+      image: "/portfolio/portfolio-ailton-tertuliano-card.png",
+      size: "medium",
     },
-  },
+  ],
 ];
 
 export function PortfolioScroll() {
@@ -78,84 +68,48 @@ export function PortfolioScroll() {
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            entry.target
-              .querySelector<HTMLElement>(".portfolio-reveal")
-              ?.classList.add("portfolio-reveal-visible");
-            observer.unobserve(entry.target);
-          }
+          if (!entry.isIntersecting) return;
+          entry.target.classList.add("portfolio-reveal-visible");
+          observer.unobserve(entry.target);
         });
       },
-      { threshold: 0.14, rootMargin: "0px 0px -7% 0px" },
+      { threshold: 0.1, rootMargin: "0px 0px -6% 0px" },
     );
 
     elements.forEach((element) => observer.observe(element));
-
     return () => observer.disconnect();
   }, []);
 
   return (
-    <section
-      ref={sectionRef}
-      id="next"
-      className="one-page-flow px-5 pb-10 pt-0 sm:px-8 lg:px-5 lg:pb-16 lg:pt-0"
-    >
-      <div className="mx-auto w-full max-w-[1500px]">
-        <div className="portfolio-reveal-anchor" data-portfolio-reveal>
-          <div className="flow-intro-position">
-            <div className="flow-intro portfolio-reveal">
-              <h2>Projetos mais recentes</h2>
-            </div>
-          </div>
-        </div>
-
-        <div className="project-stack">
-          {projects.map((project, index) => (
-            <div
-              key={project.title}
-              className="project-card-anchor"
-              data-portfolio-reveal
-            >
-              <article className={`project-card portfolio-reveal project-card-${index % 2 === 0 ? "right" : "left"}`}>
-                {project.layers && (
-                  <div
-                    className={`project-card-layered ${project.layers.backgroundTone ? `project-card-layered--${project.layers.backgroundTone}` : ""}`}
-                    style={project.layers.backgroundType === "photo" || project.layers.backgroundTone === "steel" ? undefined : { backgroundImage: `url(${project.layers.background})` }}
-                  >
-                    {project.layers.backgroundType === "photo" ? (
-                      <div
-                        className="project-card-photo-background"
-                        style={{ backgroundImage: `url(${project.layers.background})` }}
-                        aria-hidden="true"
-                      />
-                    ) : (
-                      <div className="project-card-sky-track" aria-hidden="true">
-                        <span style={{ backgroundImage: `url(${project.layers.background})` }} />
-                        <span style={{ backgroundImage: `url(${project.layers.background})` }} />
-                        <span style={{ backgroundImage: `url(${project.layers.background})` }} />
-                        <span style={{ backgroundImage: `url(${project.layers.background})` }} />
-                        <span style={{ backgroundImage: `url(${project.layers.background})` }} />
-                        <span style={{ backgroundImage: `url(${project.layers.background})` }} />
-                      </div>
-                    )}
+    <section ref={sectionRef} id="next" className="portfolio-showcase">
+      <div className="site-container portfolio-showcase-grid">
+        {projectColumns.map((column, columnIndex) => (
+          <div key={`column-${columnIndex}`} className="portfolio-showcase-column">
+            {column.map((project, projectIndex) => (
+              <article
+                key={project.title}
+                className={`portfolio-showcase-card portfolio-showcase-card--${project.size} portfolio-reveal`}
+                data-portfolio-reveal
+                style={{ transitionDelay: `${(columnIndex + projectIndex) * 90}ms` }}
+              >
+                <div className="portfolio-showcase-media">
+                  <img src={project.image} alt={project.title.replace(/&\w+;/g, "")} />
+                </div>
+                <div className="portfolio-showcase-info">
+                  {project.titleImage ? (
                     <img
-                      className={project.layers.foregroundType === "phone" ? "project-card-phone" : project.layers.foregroundType === "bonijurisLogo" ? "project-card-bonijuris-logo" : project.layers.foregroundType === "logo" ? "project-card-logo" : project.layers.foregroundType === "magazines" ? "project-card-magazines" : "project-card-notebook"}
-                      src={project.layers.foreground}
-                      alt={project.layers.foregroundType === "phone" ? "Aplicativo da Haus apresentado em um celular" : project.layers.foregroundType === "bonijurisLogo" ? "Logo da Editora Bonijuris" : project.layers.foregroundType === "logo" ? "Logo da NPG Capital" : project.layers.foregroundType === "magazines" ? "Capas da Revista Direito e Condominio" : "Site da Editora Haus apresentado em um notebook"}
+                      className={`portfolio-showcase-title-logo${project.titleLogoVariant ? ` portfolio-showcase-title-logo--${project.titleLogoVariant}` : ""}`}
+                      src={project.titleImage}
+                      alt={project.title}
                     />
-                  </div>
-                )}
-                {project.image && (
-                  <img
-                    className="project-card-full-image"
-                    src={project.image}
-                    alt="Livro Como Montar o Time dos Sonhos do Condominio"
-                  />
-                )}
+                  ) : (
+                    <h3 dangerouslySetInnerHTML={{ __html: project.title }} />
+                  )}
+                </div>
               </article>
-            </div>
-          ))}
-        </div>
+            ))}
+          </div>
+        ))}
       </div>
     </section>
   );

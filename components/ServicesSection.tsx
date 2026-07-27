@@ -4,24 +4,34 @@ import { useEffect, useRef } from "react";
 
 const services = [
   {
-    number: "01",
-    title: "Comunicação empresarial",
-    items: ["Folders e banners", "Apresentação comercial", "Propostas licitatórias"],
+    number: "1",
+    title: "Comunica\u00e7\u00e3o empresarial",
+    items: ["Folders e banners", "Apresenta\u00e7\u00e3o comercial", "Propostas licitat\u00f3rias"],
   },
   {
-    number: "02",
-    title: "Experiência de marca",
+    number: "2",
+    title: "Experi\u00eancia de marca",
     items: ["Brindes personalizados", "Identidade visual", "Papelaria corporativa"],
   },
   {
-    number: "03",
+    number: "3",
     title: "Marketing digital",
-    items: ["Social media e tráfego pago", "Criação de e-books", "Landing pages", "E-mail marketing"],
+    items: ["Social media e tr\u00e1fego pago", "Cria\u00e7\u00e3o de e-books", "Landing pages", "E-mail marketing"],
   },
   {
-    number: "04",
+    number: "4",
     title: "Editorial",
-    items: ["Capa e projeto gráfico", "Edição de livros e revistas"],
+    items: ["Capa e projeto gr\u00e1fico", "Edi\u00e7\u00e3o de livros e revistas"],
+  },
+  {
+    number: "5",
+    title: "Conte\u00fado e dire\u00e7\u00e3o criativa",
+    items: ["Conceito e campanha", "Roteiros e textos", "Dire\u00e7\u00e3o de arte", "Produ\u00e7\u00e3o de pe\u00e7as"],
+  },
+  {
+    number: "6",
+    title: "Estrat\u00e9gia e posicionamento",
+    items: ["Diagn\u00f3stico de marca", "Planejamento de comunica\u00e7\u00e3o", "Tom de voz", "Calend\u00e1rio editorial"],
   },
 ];
 
@@ -49,29 +59,22 @@ export function ServicesSection() {
   }, []);
 
   return (
-    <section ref={sectionRef} className="services-flow px-5 pb-24 pt-12 sm:px-8 lg:px-10 lg:pb-36 lg:pt-20">
+    <section id="servicos" ref={sectionRef} className="services-flow px-5 pb-24 pt-0 sm:px-8 lg:px-10 lg:pb-36 lg:pt-0">
       <div className="mx-auto w-full max-w-[1500px]">
-        <header className="services-intro services-reveal" data-services-reveal>
-          <span className="services-mark" aria-label="Haus">haus</span>
-          <h2>
-            Marcas que n&atilde;o pedem aten&ccedil;&atilde;o.<br />
-            <span>Elas ocupam espa&ccedil;o.</span>
-          </h2>
-        </header>
-
-        <div className="services-grid">
+        <div className="services-list">
           {services.map((service, index) => (
             <article
               key={service.title}
-              className="service-card services-reveal"
+              className="service-line services-reveal"
               data-services-reveal
-              style={{ transitionDelay: `${120 + index * 110}ms` }}
+              style={{ transitionDelay: `${index * 18}ms` }}
             >
-              <span className="service-card-number">{service.number}</span>
-              <h3>{service.title}</h3>
-              <ul>
-                {service.items.map((item) => <li key={item}>{item}</li>)}
-              </ul>
+              <span className="service-line-number" aria-hidden="true">{service.number}</span>
+              <div className="service-line-content">
+                <p className="service-line-copy">
+                  <strong>{service.title}.</strong> {service.items.join(", ")}.
+                </p>
+              </div>
             </article>
           ))}
         </div>
